@@ -9,7 +9,7 @@ function searchForecast(city)
     var owApiUrl = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=imperial&appid=" + owApiKey;
     var owfApiUrl = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&units=imperial&appid=" + owApiKey;
    
-
+    
     $.ajax({
         url: owApiUrl, owfApiUrl,
         method: 'GET'       
@@ -19,19 +19,34 @@ function searchForecast(city)
             var lat = response.coord.lat;
             var lon = response.coord.lon;
             var humidity = response.main.humidity;
-            var wind = response.main.wind_speed;
-            var uvi = response.main.uvi;
+            var wind = response.wind.speed;
+            
             var temp = response.main.temp;
-
+            var icon = response.weather.icon;
+            var owURl ="https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + lon + "&exclude=&appid=" + owApiKey;
 
             
-            
+            $.ajax ({
+                url: owURl,
+                method: 'GET'
+
+            })
+
+                .then(function(response){
+                    
+                    var uvi = response.hourly.uvi;
+                    $('weather-conditions').empty();
+                    var weatherDiv = $('<div class ="index-items">').html("<li></li> Temp: " + temp + "." + "<li></li> humidity: " + humidity + "." + "<li></li> wind: " + wind + "." + "<li></li> uvi: " + uvi + "." + "<li></li> icon: " + icon + "."  )
+                    $('#weather-conditions').html(weatherDiv);
+                    console.dir(uvi);
+                    console.dir(icon);
+
+                })
            
                     
-            console.log(humidity);
-            console.log(wind);
-            console.log(temp);
-            console.log(uvi);
+            
+           
+
                 
             
 
